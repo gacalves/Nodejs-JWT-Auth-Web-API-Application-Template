@@ -5,7 +5,7 @@
 
 const glob = require("glob");
 const path = require("path");
-const acceptedHttpVerbs = ["GET", "POST", "PUT", "DELETE", "HEAD"];
+const acceptedHttpVerbs = ["GET", "POST", "PUT", "DELETE", "PATCH"];
 const controllerSufix = "Controller";
 
 /**
@@ -13,18 +13,16 @@ const controllerSufix = "Controller";
  * @param {function} func
  */
 function getArgs(func) {
-  // First match everything inside the function argument parentesis.
   var args = func.toString().match(/.*?\(([^)]*)\)/)[1];
 
-  // Split the arguments string into an array comma delimited.
   return args
     .split(",")
     .map(arg => {
-      // Ensure no inline comments are parsed and trim the whitespace.
+      // Garante que nenhum comentário inline foi convertido e elimina espaços em branco.
       return arg.replace(/\/\*.*\*\//, "").trim();
     })
     .filter(arg => {
-      // Ensure no undefined values are added.
+      // Garante que nenhum valor undefined será repassado.
       return arg;
     });
 }
@@ -47,16 +45,20 @@ function getRoutesBy(controllerClass) {
         //verifica se o metodo inicia com um dos verbos http.
         if (method.toLowerCase().startsWith(httpVerb.toLowerCase())) {
           var methodArgs = getArgs(controllerClass.prototype[method]);
-          var methodSubRoute =
-            method.toLowerCase() !== httpVerb.toLowerCase()
-              ? "/".concat(
-                  method.toLowerCase().replace(httpVerb.toLowerCase(), "")
-                )
-              : "";
+          var methodSubRoute = method.toLowerCase() !== httpVerb.toLowerCase() ? "_".concat(method.toLowerCase().replace(httpVerb.toLowerCase(), "")) : "";
+          
+          //cria uma rota sem parametros
+          routeParams.push({
+            verb: httpVerb.toLowerCase(),
+            routePath: "/".concat(controllerName, methodSubRoute),
+            controllerMethod: method
+          });
+          
+          //verifica se tem parametros
           if (methodArgs && methodArgs.length > 0) {
             //para cada parametro no controller cria uma rota para ele. A ordem dos parâmetros faz diferença.
             var paramsSubRoute = "";
-            getArgs(controllerClass.prototype[method]).forEach(
+            methodArgs.forEach(
               (paramName, i, arr) => {
                 paramsSubRoute = paramsSubRoute.concat("/:", paramName);
                 routeParams.push({
@@ -70,20 +72,11 @@ function getRoutesBy(controllerClass) {
                 });
               }
             );
-          } else {
-            //cria uma rota sem parametros
-            routeParams.push({
-              verb: httpVerb.toLowerCase(),
-              routePath: "/".concat(controllerName, methodSubRoute),
-              controllerMethod: method
-            });
-          }
+          } 
         }
       });
     });
-    
     return routeParams;
-    
   } else {
     //não é um controller
     return undefined;
@@ -96,8 +89,10 @@ function getRoutesBy(controllerClass) {
  * @param {function} methodName nome do mettodo que deve ser chamado na classe controller.
  */
 function callController(controllerClass, methodName) {
-  return function(req, res, next) {
-    res.send(new controllerClass()[methodName](req.params));
+  return function (req, res, next) {
+    var actionParams = Object.values(req.params);
+    var ctrl = new controllerClass(req.body);
+    res.send(ctrl[methodName].apply(ctrl, actionParams));
     next();
   };
 }
@@ -105,7 +100,7 @@ function callController(controllerClass, methodName) {
 /**
  * Registra as rotas para cada controler presente na(s) pastas definidas em @controllersPathPattern.
  * @param {String} controllersPathPattern
- * @param {Server} server Restify server.
+ * @param {Server} server Express server.
  */
 function registerDefaultRoutes(controllersPathPattern, server) {
   glob.sync(controllersPathPattern).forEach(file => {
@@ -116,7 +111,6 @@ function registerDefaultRoutes(controllersPathPattern, server) {
         callController(candidateToControllerFile, routeItem.controllerMethod)
       );
     });
-    //console.log(candidateToControllerFile.prototype);
   });
 }
 

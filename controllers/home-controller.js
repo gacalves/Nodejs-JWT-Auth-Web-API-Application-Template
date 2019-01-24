@@ -1,22 +1,24 @@
 "use strict";
 
 class HomeController {
-  constructor() {
-    this.teste = "";
+  constructor(viewModelBag) {
+    this.viewModel = viewModelBag;
   }
 
-  get(params, fooo, testa) {
-    return JSON.stringify(params, fooo, testa);
+  get(id) {
+    return "Getted entity with id ".concat(id,'.');
   }
 
-  getFulano() {
-    console.log('get sem parametros');
+  post() {
+    return 'Saved this enttity: '.concat(JSON.stringify(this.viewModel));
   }
 
-  put() {
-    return "toma bosta";
+  put(id) {
+    return "Putted properties ".concat(JSON.stringify(this.viewModel), ' to update entity with id=', id, '.');
   }
 
-  teste() {}
+  delete(id) {
+    return "Deleted entity with id=".concat(id, '.');
+  }
 }
 module.exports = HomeController;
