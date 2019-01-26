@@ -2,15 +2,14 @@
   "name": "nodejs_jwtauth_webapi_application_template",
   "version": "1.0.0",
   "description": "A Nodejs JWT Auth with Web API Application Template.",
-  "main": "index.js",
+  "main": "/src/startup.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node startup.js"
+    "start": "node /src/startup.js"
   },
   "author": "Geovane Alves de Carvalho",
   "license": "GPL",
   "dependencies": {
-    "@decorators/express": "^2.3.0",
     "express": "^4.16.4",
     "helmet": "^3.15.0",
     "lodash": "^4.17.11",
