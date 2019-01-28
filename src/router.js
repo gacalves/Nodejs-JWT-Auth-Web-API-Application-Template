@@ -2,6 +2,7 @@
 
 const Glob = require("glob");
 const path = require("path");
+const JWTUtils = require("./security/jwt-auth");
 
 /**
  * Fornece metodos para configurar automaticamente rotas para os controllers da aplicação.
@@ -55,8 +56,8 @@ class Router {
             var methodSubRoute =
               method.toLowerCase() !== httpVerb.toLowerCase()
                 ? "_".concat(
-                    method.toLowerCase().replace(httpVerb.toLowerCase(), "")
-                  )
+                  method.toLowerCase().replace(httpVerb.toLowerCase(), "")
+                )
                 : "";
 
             //cria uma rota sem parametros
@@ -86,7 +87,7 @@ class Router {
           }
         });
       });
-      return routeParams;
+      return routeParams; 
     } else {
       //não é um controller
       return undefined;
@@ -99,10 +100,13 @@ class Router {
    * @param {function} methodName nome do mettodo que deve ser chamado na classe controller.
    */
   static callController(controllerClass, methodName) {
-    return function(req, res, next) {
+    return function (req, res, next) {
       var actionParams = Object.values(req.params);
       var ctrl = new controllerClass(req.body);
-      res.send(ctrl[methodName].apply(ctrl, actionParams));
+      ctrl.response = res;
+      ctrl.request = req;
+      let controllerResult = ctrl[methodName].apply(ctrl, actionParams);
+      res.json(controllerResult);
       next();
     };
   }
@@ -116,13 +120,13 @@ class Router {
     Glob.sync(controllersPathPattern).forEach(file => {
       var candidateToControllerFile = require(path.resolve(file));
       Router.getRoutesBy(candidateToControllerFile).forEach(routeItem => {
-        server[routeItem.verb](
-          routeItem.routePath,
-          Router.callController(
-            candidateToControllerFile,
-            routeItem.controllerMethod
-          )
-        );
+
+        //valida de o controller exige autenticação JWT e injeta a middleware que verifica o token
+        if (candidateToControllerFile.needsAuthentication && candidateToControllerFile.needsAuthentication()) {
+          server[routeItem.verb](routeItem.routePath, JWTUtils.verifyJWT, Router.callController(candidateToControllerFile, routeItem.controllerMethod));
+        } else {
+          server[routeItem.verb](routeItem.routePath, Router.callController(candidateToControllerFile, routeItem.controllerMethod));
+        }
       });
     });
   }

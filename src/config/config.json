@@ -1,8 +1,10 @@
 {
   "development": {
-    "node_port": 3000
+    "node_port": 3000,
+    "jwt_secret":"Pa$$w0rd"
   },
   "production": {
-    "node_port": 8080
+    "node_port": 8080,
+    "jwt_secret":"Pr0dPa$$w0rd"
   }
 }

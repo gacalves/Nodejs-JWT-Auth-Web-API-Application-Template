@@ -4,9 +4,9 @@
 
 "use strict";
 
-const BaseController = require('./base-controller');
+const SecuredController = require('./secured-controller');
 
-class HomeController extends BaseController{
+class HomeController extends SecuredController{
 
   /**
    * Instantiates the controller and save the view model data in instance during the request lifecycle.
