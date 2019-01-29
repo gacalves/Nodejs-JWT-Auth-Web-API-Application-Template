@@ -34,7 +34,7 @@ class PasswordHasher {
     let passwordData = PasswordHasher.sha512(userpassword, salt);
 
     //encodes salt em hash togheter
-    let buffer = new Buffer(salt.concat(passwordData.passwordHash));
+    let buffer = Buffer.from(salt.concat(passwordData.passwordHash),'ascii');
     return buffer.toString("base64");
   }
 
@@ -45,7 +45,7 @@ class PasswordHasher {
   }
 
   static getSalt(hashedPassword) {
-    let buffer = new Buffer(hashedPassword, "base64");
+    let buffer = Buffer.from(hashedPassword, "base64");
     let salt = buffer.toString("ascii").slice(0, global.gConfig.salt_hash_size);
     return salt;
   }
