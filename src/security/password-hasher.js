@@ -30,15 +30,45 @@ class PasswordHasher {
     };
   }
 
-  static saltHashPassword(userpassword) {
-    let salt = PasswordHasher.genRandomString(16); /** Gives us salt of length 16 */
+  static saltHashPassword(userpassword, salt) {
     let passwordData = PasswordHasher.sha512(userpassword, salt);
 
     //encodes salt em hash togheter
-    return Buffer.from(
-      salt.concat(passwordData.passwordHash).toString("base64")
+    let buffer = new Buffer(salt.concat(passwordData.passwordHash));
+    return buffer.toString("base64");
+  }
+
+  static hashPassword(userpassword) {
+    /** Gives us salt of length define in config file */
+    let salt = PasswordHasher.genRandomString(global.gConfig.salt_hash_size);
+    return PasswordHasher.saltHashPassword(userpassword, salt);
+  }
+
+  static getSalt(hashedPassword) {
+    let buffer = new Buffer(hashedPassword, "base64");
+    let salt = buffer.toString("ascii").slice(0, global.gConfig.salt_hash_size);
+    return salt;
+  }
+
+  /**
+   * Checks if a user password is equal the same as your hashed version.
+   * @param {string} encodedPassword - the ecoded/hashed password from database.
+   * @param {string} providedPassword - plain password entered by user.
+   */
+  static verifyHashedPassword(encodedPassword, providedPassword) {
+    //extracts salt of encoded password
+    let salt = PasswordHasher.getSalt(encodedPassword);
+    //encodes providede password with salt extracted
+    let providedPasswordEncoded = PasswordHasher.saltHashPassword(
+      providedPassword,
+      salt
     );
+
+    return providedPasswordEncoded === encodedPassword ? true : false;
   }
 }
 
-module.exports = { hashPassword: PasswordHasher.saltHashPassword };
+module.exports = {
+  hashPassword: PasswordHasher.hashPassword,
+  verifyHashedPassword: PasswordHasher.verifyHashedPassword
+};

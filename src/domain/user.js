@@ -45,7 +45,7 @@ class User {
   }
 
   toJSON() {
-    let json =  {
+    let json = {
       userName: this._userName,
       email: this._email,
       givenName: this._givenName,
@@ -53,7 +53,6 @@ class User {
       hashedPassword: this._hashePwd
     };
 
-    console.log(json);
     return json;
   }
 }

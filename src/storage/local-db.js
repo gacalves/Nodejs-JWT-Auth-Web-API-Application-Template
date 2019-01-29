@@ -9,11 +9,7 @@ class DbContext {
     this.db.defaults({ users: [] }).write();
   }
 
-  get users() {
-    /*this.db.defaults({ users: [] }).write();
-    if (this.db.get("users")) {
-      console.log("defaults users");
-    }*/
+  get users() {   
     return this.db.get("users");
   }
 }

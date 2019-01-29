@@ -24,11 +24,6 @@ const controllersPath = "./src/controllers/**/*.js";
 
 //registra as rotas padrão no servidor
 Router.registerDefaultRoutes(controllersPath, app);
-/*app._router.stack.forEach(function(r){
-  if (r.route && r.route.path){
-    console.log(r.route.stack[0].method+" -> " + r.route.path)
-  }
-});*/
 
 //sobe o servidor
 app.listen(global.gConfig.node_port, () => {

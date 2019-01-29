@@ -36,9 +36,7 @@ class RegisterController extends BaseController {
         this.viewModel.username
       );
 
-      console.log(userNameAlreadyInUse);
-
-      if (userNameAlreadyInUse && userNameAlreadyInUse.length > 0) {
+      if (userNameAlreadyInUse) {
         return { error: "Username already in use." };
       }
 
@@ -53,7 +51,6 @@ class RegisterController extends BaseController {
         hashedPwd
       );
       let result = this.repo.create(user);
-      console.log(result);
       if (result === undefined) {
         return this.statusCode(500, { message: "Failed to create user." });
       } else {

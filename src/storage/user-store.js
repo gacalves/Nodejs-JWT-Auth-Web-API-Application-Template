@@ -8,7 +8,8 @@ class UserStore {
   }
 
   getUserByName(userName) {
-    return this.userRepo.filter({ userName: userName }).value();
+    return this.userRepo.filter({ userName: userName }).value()[0];
+    
   }
 
   create(user) {
