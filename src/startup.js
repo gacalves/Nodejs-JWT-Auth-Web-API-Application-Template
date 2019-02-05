@@ -1,31 +1,30 @@
-"use strict";
+'use strict'
 
-const express = require("express");
-const helmet = require("helmet");
-var logger = require("morgan");
-//const JWTUtils =require("./jwt-auth");
+const express = require('express')
+const helmet = require('helmet')
+var logger = require('morgan')
 
-const Router = require("./router");
+const Router = require('./router')
 
 //Comente a linha abaixo e descomente a próxima para ativar o ambiente de produção.
-process.env.NODE_ENV = "development";
+process.env.NODE_ENV = 'development'
 //process.env.NODE_ENV = 'production';
 
-//carrega as configurações da aplicação.
-require("./config/config");
+//loads app configuration to environment in NODE_ENV
+require('./config/config')
 
-const app = express();
-app.use(logger("dev"));
-app.use(helmet());
-app.use(express.json());
-app.use(express.urlencoded({ extended: false }));
-//app.use(JWTUtils.verifyJWT);
-const controllersPath = "./src/controllers/**/*.js";
+const app = express()
+const controllersPath = './src/controllers/**/*.js'
 
-//registra as rotas padrão no servidor
-Router.registerDefaultRoutes(controllersPath, app);
+app.use(logger('dev'))
+app.use(helmet())
+app.use(express.json())
+app.use(express.urlencoded({ extended: false }))
 
-//sobe o servidor
+//register default rontes on server
+Router.registerDefaultRoutes(controllersPath, app)
+
+//makes server up
 app.listen(global.gConfig.node_port, () => {
-  console.log("Server Started!");
-});
+	console.log('Server Started!')
+})

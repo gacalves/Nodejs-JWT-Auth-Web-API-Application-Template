@@ -1,36 +1,36 @@
-"use strict";
+'use strict'
 
 /**
  * Base Controller that all controllers should inherit.
  */
-let res;
-let req;
+let res
+let req
 
 class BaseController {
   constructor(viewModelBag) {
-    this.viewModel = viewModelBag;
+    this.viewModel = viewModelBag
   }
 
   get response() {
-    return res;
+    return res
   }
 
   set response(value) {
-    res = value;
+    res = value
   }
 
   get request() {
-    return req;
+    return req
   }
 
   set request(value) {
-    req = value;
+    req = value
   }
-  
-  statusCode(httpStatusCode, message){
-    this.response.status(httpStatusCode); 
-    return message;
+
+  statusCode(httpStatusCode, message) {
+    this.response.status(httpStatusCode)
+    return message
   }
 }
 
-module.exports = BaseController;
+module.exports = BaseController

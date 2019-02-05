@@ -1,15 +1,18 @@
-"use strict";
+'use strict'
 
-const BaseController = require('./base-controller');
+/**
+ * All controllers tha needs to be secured should inherit from this.
+ */
 
-class SecuredController extends BaseController{
+const BaseController = require('./base-controller')
 
+class SecuredController extends BaseController {
   constructor(viewModelBag) {
-    super(viewModelBag);
+    super(viewModelBag)
   }
 
-  static needsAuthentication(){
-      return true;
+  static needsAuthentication() {
+    return true
   }
 }
-module.exports = SecuredController;
+module.exports = SecuredController

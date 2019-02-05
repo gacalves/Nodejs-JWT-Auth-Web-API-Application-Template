@@ -1,49 +1,56 @@
-"use strict";
+'use strict'
 
-let _userName;
-let _email;
-let _givenName;
-let _lastName;
-let _hashePwd;
+/**
+ * Defautl user database model.
+ */
+
+let _userName
+let _email
+let _givenName
+let _lastName
+let _hashePwd
 
 class User {
   constructor(userName, email, givenName, lastName, hashePwd) {
-    this._userName = userName;
-    this._email = email;
-    this._givenName = givenName;
-    this._lastName = lastName;
-    this._hashePwd = hashePwd;
+    this._userName = userName
+    this._email = email
+    this._givenName = givenName
+    this._lastName = lastName
+    this._hashePwd = hashePwd
   }
 
   get userName() {
-    return this._userName;
+    return this._userName
   }
   get email() {
-    return this._email;
+    return this._email
   }
   get givenName() {
-    return this._givenName;
+    return this._givenName
   }
   get lastName() {
-    return this._lastName;
+    return this._lastName
   }
   get hashePwd() {
-    return this._hashePwd;
+    return this._hashePwd
   }
 
   set userName(value) {
-    this._userName = value;
+    this._userName = value
   }
   set email(value) {
-    this._email = value;
+    this._email = value
   }
   set givenName(value) {
-    this._givenName = value;
+    this._givenName = value
   }
   set lastName(value) {
-    this._lastName = value;
+    this._lastName = value
   }
 
+  /**
+   * generates a json with values from this models to aux storage.
+   */
   toJSON() {
     let json = {
       userName: this._userName,
@@ -51,10 +58,10 @@ class User {
       givenName: this._givenName,
       lastName: this._lastName,
       hashedPassword: this._hashePwd
-    };
+    }
 
-    return json;
+    return json
   }
 }
 
-module.exports = User;
+module.exports = User

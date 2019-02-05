@@ -2,11 +2,13 @@
   "development": {
     "node_port": 3000,
     "jwt_secret":"Pa$$w0rd",
-    "salt_hash_size":16
+    "salt_hash_size":16,
+    "jwt_expires_in_seconds":300
   },
   "production": {
     "node_port": 8080,
     "jwt_secret":"Pr0dPa$$w0rd",
-    "salt_hash_size":16
+    "salt_hash_size":16,
+    "jwt_expires_in_seconds":300
   }
 }

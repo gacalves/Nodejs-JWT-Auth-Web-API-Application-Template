@@ -1,15 +1,19 @@
-"use strict";
+'use strict'
 
-const BaseController = require("./base-controller");
-const PasswordHasher = require("../security/password-hasher");
-const PasswordValidator = require("../security/password-validator");
-const UserStore = require("../storage/user-store");
-const User = require("../domain/user");
+/**
+ * This controller provides registration for new users.
+ */
+
+const BaseController = require('./base-controller')
+const PasswordHasher = require('../security/password-hasher')
+const PasswordValidator = require('../security/password-validator')
+const UserStore = require('../storage/user-store')
+const User = require('../domain/user')
 
 class RegisterController extends BaseController {
   constructor(viewModelBag) {
-    super(viewModelBag);
-    this.repo = new UserStore();
+    super(viewModelBag)
+    this.repo = new UserStore()
   }
 
   post() {
@@ -26,22 +30,22 @@ class RegisterController extends BaseController {
         .shouldContainLowerCase()
         .shouldContainUpperCase()
         .shouldContainSymbols()
-        .minLength(6);
+        .minLength(6)
 
       if (!pwdValidator.isValid(this.viewModel.password)) {
-        return { error: "Invalid Password." };
+        return { error: 'Invalid Password.' }
       }
 
       let userNameAlreadyInUse = this.repo.getUserByName(
         this.viewModel.username
-      );
+      )
 
       if (userNameAlreadyInUse) {
-        return { error: "Username already in use." };
+        return { error: 'Username already in use.' }
       }
 
       //hash user password
-      var hashedPwd = PasswordHasher.hashPassword(this.viewModel.password);
+      var hashedPwd = PasswordHasher.hashPassword(this.viewModel.password)
 
       let user = new User(
         this.viewModel.username,
@@ -49,14 +53,14 @@ class RegisterController extends BaseController {
         this.viewModel.givenName,
         this.viewModel.lastName,
         hashedPwd
-      );
-      let result = this.repo.create(user);
+      )
+      let result = this.repo.create(user)
       if (result === undefined) {
-        return this.statusCode(500, { message: "Failed to create user." });
+        return this.statusCode(500, { message: 'Failed to create user.' })
       } else {
-        return { message: "User successful created." };
+        return { message: 'User successful created.' }
       }
     }
   }
 }
-module.exports = RegisterController;
+module.exports = RegisterController
