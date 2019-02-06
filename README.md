@@ -1,11 +1,31 @@
-# Nodejs Web API Application Template
-A Nodejs starter project template for Web API. This template has been configured to user JWT Authentication (username and password).
+# Nodejs JWT Auth Web API application template
+Este é um esqueleto básico para o desenvolvimento de APIs com Node.js com autenticação jwt.
 
-* This project has compatible with native nodejs features, without transpilers.
+## Como utilizar este template:
+Por convenção deve-se:
+* Criar a classe que representa o controller dentro da pasta controllers. O arquivo deve terminar com "controller".
+* Utilize classes do ES6 para definir o controller, sendo que o nome da classe deve terminar com "Controller".
+* Cada método do controller, em que o seu nome iniciar com um dos verbos HTTP suportados, será automaticamente mapeado para uma rota no Express. Os verbos suportados podem ser verificados em `Router.supportedHttpVerbs`.
+Podem ser especificados métodos com nomes que não seguem esta convenção (iniciando com um verbo http), embora estes não serão mapeados automaticamente.
+Pode-se configurar rotas para estes métodos no arquivo `startup.js`, logo após a chamada ao método `Router.registerDefaultRoutes(....)`.
 
-How to use:
+## Autenticação
+A autenticação com JWT a nível de controller está disponível, porém é necessário que o controller herde de `SecuredController` (secured-controller.js). Caso não se deseje autenticação o controller deve herdar de `BaseController` (`/src/controllers/base-controller.js`). No futuro caso seja disponibilizado na linguagem algo semelhante aos annotations do .net, isto pode ser melhorado.
+A geração e validação de tokens de acesso é feita pela classe `JwtAuth` (`/src/security/jwt-auth.js`).
 
-1 Create your controller clas in controllers folder
- 1.1 If you wants a controller that requires authentication inherits from SecuredController class. If your controller doesnt needs authentication it should inherits from BaseController.
-2 In controller class, methods that her name starts with an supported HTTP verb will automaticaly mapped to a route.
+## Config
+As configurações da aplicação podem ser definidas `src/config/config.json`. Os valores definidos neste arquivo são carregados globalmente pelo `startup.json. O ambiente também pode ser alterado.
+Este arquivo já possui algumas configurações definidas:
+* `jwt_secret`: senha privada utilizada para encriptar a senhas dos usuários registrados,
+* `salt_hash_size`: o tamanho do salt utilizado no processo de hash.
+* `jwt_expires_in_seconds`: por quantos segundos o token de acesso gerado é valido.
+* `node_port`: em qual porta o Express irá escutar.
 
+## Banco de dados
+Este template está utilizando um banco de dados local json.
+ATENÇÃO: Em produção deve-se configurar a aplicação para conectar a um SGBD.
+
+## What's next?
+* Autorização a nível de método para os controllers.
+
+Contribuições a este repositório são bem-vindas.
