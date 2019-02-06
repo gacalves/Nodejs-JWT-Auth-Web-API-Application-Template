@@ -21,7 +21,7 @@ app.use(helmet())
 app.use(express.json())
 app.use(express.urlencoded({ extended: false }))
 
-//register default rontes on server
+//register default routes on server
 Router.registerDefaultRoutes(controllersPath, app)
 
 //makes server up
