@@ -6,7 +6,7 @@ var logger = require('morgan')
 
 const Router = require('./router')
 
-//Comente a linha abaixo e descomente a próxima para ativar o ambiente de produção.
+//Comment the line below and uncomment the next line to activate the production environment.
 process.env.NODE_ENV = 'development'
 //process.env.NODE_ENV = 'production';
 
