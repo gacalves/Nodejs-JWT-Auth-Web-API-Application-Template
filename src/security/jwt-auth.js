@@ -44,9 +44,6 @@ class JwtAuth {
    * @param {string} userName username to inject on generated token.
    */
 	static generateAccessToken(userName) {
-		let notBefore = Math.floor(Date.now() / 1000);
-		console.log(Date.now());
-		
 		let token = jwt.sign({ user_name: userName }, global.gConfig.jwt_secret, {
 			expiresIn: global.gConfig.jwt_expires_in_seconds,
 			notBefore: Math.floor(Date.now() / 1000)

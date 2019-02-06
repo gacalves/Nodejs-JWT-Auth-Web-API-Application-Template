@@ -10,7 +10,30 @@ const JwtAuth = require('./security/jwt-auth')
  */
 class Router {
 	static get acceptedHttpVerbs() {
-		return ['GET', 'POST', 'PUT', 'DELETE', 'PATCH']
+		return [
+			'CHECKOUT',
+			'COPY',
+			'DELETE',
+			'GET',
+			'HEAD',
+			'LOCK',
+			'MERGE',
+			'MKACTIVITY',
+			'MKCOL',
+			'MOVE',
+			'NOTIFY',
+			'OPTIONS',
+			'PATCH',
+			'POST',
+			'PURGE',
+			'PUT',
+			'REPORT',
+			'SEARCH',
+			'SUBSCRIBE',
+			'TRACE',
+			'UNLOCK',
+			'UNSUBSCRIBE'
+		]
 	}
 	static get controllerSufix() {
 		return 'Controller'
