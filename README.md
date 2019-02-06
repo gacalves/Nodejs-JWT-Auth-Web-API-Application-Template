@@ -1,4 +1,4 @@
-# Nodejs JWT Auth Web API application template
+# Template para aplicações Nodejs Web API com autenticação JWT
 Este é um esqueleto básico para o desenvolvimento de APIs com Node.js, autenticação jwt e Express js.
 Este template utiliza o Helmet para acrescentar certo nível proteção a aplicação e o morgan para auxiliar a geração de logs.
 
