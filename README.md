@@ -1,4 +1,4 @@
-# Template para aplicações Nodejs Web API com autenticação JWT
+# Template para aplicações Node.js Web API com autenticação JWT
 Esqueleto básico para o desenvolvimento de APIs com Node.js, autenticação jwt e Express js.  
 Este template utiliza o [Helmet](https://github.com/helmetjs/helmet) para acrescentar certo nível proteção a aplicação.  
 Foi utilizado o ES6 tendo em vista a sintaxe oficialmente suportada pelo Node.js.
