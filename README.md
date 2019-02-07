@@ -44,6 +44,6 @@ ATENÇÃO: Em produção deve-se configurar a aplicação para conectar a um SGB
 
 ## What's next?
 * Autorização a nível de método para os controllers.
-* Autorização granular papeis.
+* Autorização granular através de papeis.
 
 Contribuições a este repositório são bem-vindas!
