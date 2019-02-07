@@ -8,7 +8,7 @@ const BaseController = require('./base-controller')
 const PasswordHasher = require('../security/password-hasher')
 const PasswordValidator = require('../security/password-validator')
 const UserStore = require('../storage/user-store')
-const User = require('../domain/user')
+const User = require('../models/user')
 
 class RegisterController extends BaseController {
   constructor(viewModelBag) {

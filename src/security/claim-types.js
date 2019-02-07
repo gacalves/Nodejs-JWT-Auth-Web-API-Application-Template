@@ -1,7 +1,7 @@
 'use strict'
 
 /**
- * Default claim types for users that could be inject in token or stored to aux client application.
+ * Default claim types for users that could be injected in token or stored to aux client application.
  */
 class ClaimTypes {
   static get Actor() {

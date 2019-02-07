@@ -10,11 +10,11 @@ const UserStore = require('../storage/user-store')
 
 class JwtAuth {
 	/**
- * Check if a provided token is valid.
- * @param {Express.Request} req http request.
- * @param {Express.Response} res http response
- * @param {Express.NextFunction} next redirections for Express js.
- */
+	 * Check if a provided token is valid.
+	 * @param {Express.Request} req http request.
+	 * @param {Express.Response} res http response
+	 * @param {Express.NextFunction} next redirections for Express js.
+	 */
 	static verifyJWT(req, res, next) {
 		let token = req.headers.authorization
 		if (token && token.length > 0) {
@@ -32,8 +32,11 @@ class JwtAuth {
 
 			//checks if user is in database
 			let user = new UserStore().getUserByName(decoded.user_name)
-			if (user) req.userName = decoded.user_name
-			else return res.status(401).send({ auth: false, message: 'Invalid token.' })
+			if (user) {
+				req.userName = decoded.user_name
+			} else {
+				return res.status(401).send({ auth: false, message: 'Invalid token.' })
+			}
 
 			//if all done go ahead
 			next()
@@ -41,13 +44,13 @@ class JwtAuth {
 	}
 
 	/**
-   * Generate the jwt access token.
-   * @param {string} userName username to inject on generated token.
-   */
+	 * Generate the jwt access token.
+	 * @param {string} userName username to inject on generated token.
+	 */
 	static generateAccessToken(userName) {
 		let token = jwt.sign({ user_name: userName }, global.gConfig.jwt_secret, {
 			expiresIn: global.gConfig.jwt_expires_in_seconds,
-			notBefore: 0 //não aceitar antes de agora
+			notBefore: 0 //token is not valid before now
 		})
 		return token
 	}

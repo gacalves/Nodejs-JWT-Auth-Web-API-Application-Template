@@ -1,6 +1,5 @@
 'use strict'
 
-const jwt = require('jsonwebtoken')
 const JwtAuth = require('../security/jwt-auth')
 
 const BaseController = require('./base-controller')
