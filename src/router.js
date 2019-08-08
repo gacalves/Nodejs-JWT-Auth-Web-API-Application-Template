@@ -3,6 +3,7 @@
 const Glob = require('glob')
 const path = require('path')
 const JwtAuth = require('./security/jwt-auth')
+const util = require('util')
 
 /**
  * Provides methods to automatically configure routes to application controllers.
@@ -76,7 +77,7 @@ class Router {
 						var methodArgs = Router.getArgs(controllerClass.prototype[method])
 						var methodSubRoute =
 							method.toLowerCase() !== httpVerb.toLowerCase()
-								? '_'.concat(method.toLowerCase().replace(httpVerb.toLowerCase(), ''))
+								? '/'.concat(method.toLowerCase().replace(httpVerb.toLowerCase(), ''))
 								: ''
 
 						//create a route without parameters
@@ -120,9 +121,17 @@ class Router {
 			var ctrl = new controllerClass(req.body)
 			ctrl.response = res
 			ctrl.request = req
-			let controllerResult = ctrl[methodName].apply(ctrl, actionParams)
-			res.json(controllerResult)
-			next()
+
+			if (util.types.isAsyncFunction(ctrl[methodName])) {
+        		ctrl[methodName].apply(ctrl, actionParams).then(asyncControllerResult => {
+          			asyncControllerResult ? res.json(asyncControllerResult) : res.json({})
+          			next()
+        		})
+      		} else {
+        		let controllerResult = ctrl[methodName].apply(ctrl, actionParams)
+				res.json(controllerResult)
+				next()
+      		}
 		}
 	}
 
@@ -149,6 +158,12 @@ class Router {
 					)
 				}
 			})
+		})
+		//logs express routes
+		server._router.stack.forEach(function(r) {
+			if (r.route && r.route.path) {
+			  console.log(Object.keys(r.route.methods)[0] + ' => ' + r.route.path)
+			}
 		})
 	}
 }
